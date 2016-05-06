@@ -1,6 +1,14 @@
 var RequestParsedBodySentValue = function() {
-	this.evaluate = function() {
-		var exchange = this.req.getLastExchange();
+	this.evaluate = function(context) {
+
+		var exchange;
+		if(this.req) {
+			exchange = this.req.getLastExchange();
+		} else {
+			exchange = context.getCurrentRequest().getLastExchange();
+		}
+
+		
 		var body = exchange.requestBody;
 
 		var parsedBody = JSON.parse(body);
@@ -14,7 +22,11 @@ var RequestParsedBodySentValue = function() {
 	}
 
 	this.text = function(context) {
-		return this.req.name + " ➤ " + this.key;
+		if(this.req) {
+			return this.req.name + " ➤ " + this.key;
+		} else {
+			return this.key;
+		}
 	}
 }
 
